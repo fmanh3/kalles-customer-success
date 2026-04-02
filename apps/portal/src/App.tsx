@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Layout, Users, Wallet, Bus, AlertCircle, LogOut } from 'lucide-react';
+import { useState } from 'react';
+import { Users, Wallet, Bus, AlertCircle, LogOut } from 'lucide-react';
 import './App.css';
 
 type Role = 'NONE' | 'CEO' | 'DRIVER';
