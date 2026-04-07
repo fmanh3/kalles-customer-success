@@ -45,16 +45,12 @@ app.get('/api/ceo/dashboard', async (req, res) => {
 app.get('/api/driver/schedule/:driverId', async (req, res) => {
   const { driverId } = req.params;
   try {
-    console.log(`[BFF] Hämtar schema för förare ${driverId}...`);
-    // I en riktig app skulle vi anropa HR-tjänstens API här
-    res.json({
-      driverId,
-      shifts: [
-        { id: 'S-101', start: '08:00', end: '16:00', line: '676', status: 'SCHEDULED' }
-      ]
-    });
+    console.log(`[BFF] Hämtar schema för förare: ${driverId} (encoded: ${encodeURIComponent(driverId)})`);
+    const hrRes = await axios.get(`${HR_SERVICE_URL}/drivers/${encodeURIComponent(driverId)}/schedule`);
+    res.json(hrRes.data);
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    console.error('[BFF] Fel vid anrop till HR-tjänst:', err.message);
+    res.status(500).json({ error: 'Kunde inte hämta schema från HR-domänen' });
   }
 });
 
