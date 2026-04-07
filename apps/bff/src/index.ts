@@ -54,6 +54,33 @@ app.get('/api/driver/schedule/:driverId', async (req, res) => {
   }
 });
 
+/**
+ * Driver Profile Endpoint
+ */
+app.get('/api/driver/profile/:driverId', async (req, res) => {
+  const { driverId } = req.params;
+  try {
+    console.log(`[BFF] Hämtar profil för förare: ${driverId}`);
+    const hrRes = await axios.get(`${HR_SERVICE_URL}/drivers/${encodeURIComponent(driverId)}/profile`);
+    res.json(hrRes.data);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Kunde inte hämta förarprofil' });
+  }
+});
+
+/**
+ * Vehicle Detailed Status Endpoint
+ */
+app.get('/api/vehicles/:id/details', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const trafficRes = await axios.get(`${TRAFFIC_SERVICE_URL}/vehicles/${id}/status`);
+    res.json(trafficRes.data);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Kunde inte hämta fordonsstatus' });
+  }
+});
+
 app.get('/health', (req, res) => res.send('BFF is healthy'));
 
 app.listen(port, () => {
